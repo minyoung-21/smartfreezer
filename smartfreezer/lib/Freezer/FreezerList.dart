@@ -33,12 +33,12 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 class YourListViewItem extends StatefulWidget {
   final String title;
-  // final String subtitle;
+  final String subtitle;
 
   const YourListViewItem({
     Key? key,
     required this.title,
-    // required this.subtitle,
+    required this.subtitle,
   }) : super(key: key);
 
   @override
@@ -74,21 +74,21 @@ class _YourListViewItemState extends State<YourListViewItem> {
       children: [
         ListTile(
           title: new Text(widget.title),
-          // subtitle: rn,
+          subtitle: new Text(widget.subtitle),
           trailing: new CupertinoSwitch(
             value: isSwitched,
             // activeColor: Colors.pink,
             onChanged: (value) {
               setState(() {
                 isSwitched = value;
-                //   if (isSwitched == true) {
-                //     if (d == rn) {
-                //       _showNotification(widget.title, rn);
-                //       databaseRef.update({
-                //         'Bool': true,
-                //       }).then((_) {});
-                //     }
-                //   }
+                  if (isSwitched == true) {
+                    if (d == widget.subtitle) {
+                      _showNotification(widget.title, widget.subtitle);
+                      databaseRef.update({
+                        'Bool': true,
+                      }).then((_) {});
+                    }
+                  }
                 
               });
             },
@@ -157,6 +157,7 @@ class _FreezerListState extends State<FreezerList> {
               children: [
                 YourListViewItem(
                   title: snapshot.value['FreezerName'],
+                  subtitle: snapshot.value['Time']
                 ),
                 Row(
                   children: [
@@ -177,6 +178,7 @@ class _FreezerListState extends State<FreezerList> {
                                   builder: (builder) => FreezerInfo(
                                         freezertitle:
                                             snapshot.value['FreezerName'],
+                                            
                                       )),
                               (route) => false);
                         },

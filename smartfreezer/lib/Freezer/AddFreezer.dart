@@ -51,9 +51,9 @@ class _AddFreezerState extends State<AddFreezer> {
       });
   }
 
-  void addData(String data) {
+  void addData(String data, String time) {
     databaseRef.child("User").child(uid).child(data).set(
-        {"FreezerName": data, "RandomGen": rg}).asStream();
+        {"FreezerName": data, "RandomGen": rg, "Time": time}).asStream();
   }
 
   void addFreez(String time) {
@@ -133,7 +133,7 @@ class _AddFreezerState extends State<AddFreezer> {
                   child: TextButton(
                       child: Text("Save to Database"),
                       onPressed: () {
-                        addData(textcontroller.text);
+                        addData(textcontroller.text, _timeController.text);
                         addFreez(_timeController.text);
                         textcontroller.clear();
                         Navigator.of(context).pop();

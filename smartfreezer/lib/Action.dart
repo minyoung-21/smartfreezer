@@ -14,14 +14,8 @@ class ActionBut extends StatelessWidget {
       padding: EdgeInsets.zero,
       children: <Widget>[ Column(
           children: [
-            ListTile(
-              title: Text(''),
-              onTap: () {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (builder) => FreezerList()),
-                    (route) => false);
-              },
+            SizedBox(
+              height: 50,
             ),
             ListTile(
               title: Text('Freezer List'),
@@ -43,7 +37,7 @@ class ActionBut extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Main'),
+              title: Text('Main Page'),
               onTap: () {
                 Navigator.pushAndRemoveUntil(
                     context,
@@ -52,7 +46,7 @@ class ActionBut extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Add Freezer'),
+              title: Text('Select the Bluetooth device'),
               onTap: () {
                 Navigator.pushAndRemoveUntil(
                     context,

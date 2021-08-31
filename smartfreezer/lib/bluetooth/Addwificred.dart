@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:smartfreezer/Action.dart';
 import 'package:smartfreezer/Freezer/AddFreezer.dart';
+import 'package:smartfreezer/bluetooth/Home.dart';
 
 class ChatPage extends StatefulWidget {
   final BluetoothDevice server;
@@ -79,6 +80,23 @@ class _ChatPage extends State<ChatPage> {
     super.dispose();
   }
 
+  showsnackbar() {
+    final snackBar = SnackBar(
+        action: SnackBarAction(
+            label: "Go back to bluetooth page",
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  (MaterialPageRoute(builder: (builder) => MainPage())),
+                  (route) => false);
+            }),
+        content: const Text("Bluetooth not connected"));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  var _formkey = GlobalKey<FormState>();
+  var _formkey2 = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final serverName = widget.server.name ?? "Unknown";
@@ -91,24 +109,50 @@ class _ChatPage extends State<ChatPage> {
                     ? Text('Send your wifi credentials to ' + serverName)
                     : Text('Your wifi credentials ' + serverName))),
         body: Column(children: <Widget>[
-          TextFormField(
-            controller: wifiname,
+          Form(
+            key: _formkey,
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your Wifi Name';
+                }
+                return null;
+              },
+              controller: wifiname,
+            ),
           ),
           TextButton(
-              // onPressed:
-              //     isConnected ? () => _sendnameandpwd(wifiname.text) : null,
               onPressed: () {
-                _sendnameandpwd(wifiname.text);
+                if (_formkey.currentState!.validate()) {
+                  if (isConnected != false) {
+                    _sendnameandpwd(wifiname.text);
+                  } else {
+                    showsnackbar();
+                  }
+                }
               },
               child: Text("Send Name")),
-          TextFormField(
-            controller: wifipwd,
+          Form(
+            key: _formkey2,
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your Wifi Password';
+                }
+                return null;
+              },
+              controller: wifipwd,
+            ),
           ),
           TextButton(
-              // onPressed:
-              //     isConnected ? () => _sendnameandpwd(wifipwd.text) : null,
               onPressed: () {
-                _sendnameandpwd(wifipwd.text);
+                if (_formkey2.currentState!.validate()) {
+                  if (isConnected != false) {
+                    _sendnameandpwd(wifipwd.text);
+                  } else {
+                    showsnackbar();
+                  }
+                }
               },
               child: Text("Connect Wifi"))
         ])
@@ -171,7 +215,10 @@ class _ChatPage extends State<ChatPage> {
     name = name.trim();
     wifiname.clear();
     wifipwd.clear();
-
+    Navigator.pushAndRemoveUntil(
+        context,
+        (MaterialPageRoute(builder: (builder) => AddFreezer())),
+        (route) => false);
     if (name.length > 0) {
       try {
         connection!.output.add(Uint8List.fromList(utf8.encode(name + "\r\n")));
@@ -180,10 +227,6 @@ class _ChatPage extends State<ChatPage> {
         setState(() {
           messages.add(_Message(clientID, name));
         });
-        Navigator.pushAndRemoveUntil(
-            context,
-            (MaterialPageRoute(builder: (builder) => AddFreezer())),
-            (route) => false);
 
         //   Future.delayed(Duration(milliseconds: 333)).then((_) {
         //     listScrollController.animateTo(
