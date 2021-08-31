@@ -81,15 +81,15 @@ class _YourListViewItemState extends State<YourListViewItem> {
             onChanged: (value) {
               setState(() {
                 isSwitched = value;
-                  if (isSwitched == true) {
-                    if (d == widget.subtitle) {
-                      _showNotification(widget.title, widget.subtitle);
-                      databaseRef.update({
-                        'Bool': true,
-                      }).then((_) {});
-                    }
+                if (isSwitched == true) {
+                  if (d == widget.subtitle) {
+                    _scheduleDailyTenAMNotification(
+                        widget.title, widget.subtitle);
+                    databaseRef.update({
+                      'Bool': true,
+                    }).then((_) {});
                   }
-                
+                }
               });
             },
           ),
@@ -98,23 +98,52 @@ class _YourListViewItemState extends State<YourListViewItem> {
     ));
   }
 
-  Future<void> _showNotification(
-    String title,
-    String body,
-  ) async {
-    flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
-        title,
-        body,
-        tz.TZDateTime.now(tz.local).add(Duration(seconds: 1)),
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-              'channel id', 'channel name', 'channel des'),
-        ),
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true);
+//   Future<void> _showNotification(
+//     String title,
+//     String body,
+//   ) async {
+//     flutterLocalNotificationsPlugin.zonedSchedule(
+//         0,
+//         title,
+//         body,
+//         tz.TZDateTime.now(tz.local).add(Duration(seconds: 1)),
+//         NotificationDetails(
+//           android: AndroidNotificationDetails(
+//               'channel id', 'channel name', 'channel des'),
+//         ),
+//         uiLocalNotificationDateInterpretation:
+//             UILocalNotificationDateInterpretation.absoluteTime,
+//         androidAllowWhileIdle: true);
+//   }
+
+}
+
+Future<void> _scheduleDailyTenAMNotification(String title, String time) async {
+  await flutterLocalNotificationsPlugin.zonedSchedule(
+      0,
+      title,
+      time,
+      _nextInstanceOfTenAM(),
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+            'daily notification channel id',
+            'daily notification channel name',
+            'daily notification description'),
+      ),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time);
+}
+
+tz.TZDateTime _nextInstanceOfTenAM() {
+  final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+  tz.TZDateTime scheduledDate = tz.TZDateTime(
+      tz.local, now.year, now.month, now.day, now.hour, now.minute);
+  if (scheduledDate.isBefore(now)) {
+    scheduledDate = scheduledDate.add(const Duration(days: 1));
   }
+  return scheduledDate;
 }
 
 class FreezerList extends StatefulWidget {
@@ -156,9 +185,8 @@ class _FreezerListState extends State<FreezerList> {
             return Column(
               children: [
                 YourListViewItem(
-                  title: snapshot.value['FreezerName'],
-                  subtitle: snapshot.value['Time']
-                ),
+                    title: snapshot.value['FreezerName'],
+                    subtitle: snapshot.value['Time']),
                 Row(
                   children: [
                     TextButton(
@@ -166,6 +194,7 @@ class _FreezerListState extends State<FreezerList> {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) => EditDialog(
+                                    fn: snapshot.value['FreezerName'],
                                     randomGenerated: "",
                                   ));
                         },
@@ -178,7 +207,6 @@ class _FreezerListState extends State<FreezerList> {
                                   builder: (builder) => FreezerInfo(
                                         freezertitle:
                                             snapshot.value['FreezerName'],
-                                            
                                       )),
                               (route) => false);
                         },

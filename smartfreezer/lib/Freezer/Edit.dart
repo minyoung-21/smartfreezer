@@ -6,18 +6,26 @@ import 'package:intl/intl.dart';
 
 class EditDialog extends StatefulWidget {
   final String randomGenerated;
-  const EditDialog({Key? key, required this.randomGenerated}) : super(key: key);
+  final String fn;
+
+  const EditDialog({Key? key, required this.randomGenerated, required this.fn})
+      : super(key: key);
 
   @override
-  _EditDialogState createState() => _EditDialogState(this.randomGenerated);
+  _EditDialogState createState() =>
+      _EditDialogState(this.randomGenerated, this.fn);
 }
 
 class _EditDialogState extends State<EditDialog> {
   //randomly generated parsed to edit dialog
   late final String randomGenerated;
-  _EditDialogState(this.randomGenerated);
+  late final String fn;
+
+  _EditDialogState(this.randomGenerated, this.fn);
 
   late DatabaseReference _freezerref;
+  late DatabaseReference _freezerref2;
+
   final uid = FirebaseAuth.instance.currentUser!.uid;
   late String _setTime;
   late String _hour, _minute, _time;
@@ -50,14 +58,17 @@ class _EditDialogState extends State<EditDialog> {
       .reference()
       .child("Freezer")
       .child("randomly generated");
-
+  final databaseref2 = FirebaseDatabase.instance.reference().child("User");
   void updateData(String time) {
     databaseRef.update({"Time": time}).then((_) {});
+    databaseref2.child(uid).child(fn).update({"Time": time}).then((_) {});
   }
 
   void initState() {
     final FirebaseDatabase database = FirebaseDatabase();
     _freezerref = databaseRef.reference().child(uid);
+    _freezerref2 = databaseref2.reference().child("User").child(uid).child(fn);
+
     super.initState();
     _dateController.text = DateFormat.yMd().format(DateTime.now());
     _timeController.text = formatDate(
@@ -67,7 +78,6 @@ class _EditDialogState extends State<EditDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
       title: Text("Edit Your Time"),
       actions: [
