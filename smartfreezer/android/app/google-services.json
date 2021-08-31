@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "807030744622",
+    "firebase_url": "https://smartfreezer-9b711-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "smartfreezer-9b711",
+    "storage_bucket": "smartfreezer-9b711.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807030744622:android:337187df43f8fbc2e8a1bf",
+        "android_client_info": {
+          "package_name": "com.example.smartfreezer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "807030744622-7aojpimu2ue24pbmk1nt6u6b239mm3ol.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smartfreezer",
+            "certificate_hash": "cc5a23d5093787378d557ae77fc9c80725c9bb2f"
+          }
+        },
+        {
+          "client_id": "807030744622-1rbo1rcjsievt6mtgj5p08tr89hfs6qh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDLvTS7mreqBFaM71QZUCn90wwdDAngf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "807030744622-1rbo1rcjsievt6mtgj5p08tr89hfs6qh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
