@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:date_format/date_format.dart';
 import 'package:smartfreezer/Action.dart';
-import '../Auth.dart';
+import '../RegisterPage/Auth.dart';
 import 'FreezerList.dart';
 import 'package:intl/intl.dart';
 
-import '../SignIn.dart';
+import '../RegisterPage/SignIn.dart';
 
 class AddFreezer extends StatefulWidget {
   late final FirebaseApp app;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartfreezer/Freezer/AddFreezer.dart';
 import 'package:smartfreezer/bluetooth/Home.dart';
-import 'package:smartfreezer/SignUp.dart';
+import 'package:smartfreezer/RegisterPage/SignUp.dart';
 import 'Auth.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 

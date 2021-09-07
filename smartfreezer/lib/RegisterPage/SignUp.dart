@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:smartfreezer/Auth.dart';
+import 'package:smartfreezer/RegisterPage/Auth.dart';
 import 'package:smartfreezer/bluetooth/Home.dart';
-import 'package:smartfreezer/SignIn.dart';
+import 'package:smartfreezer/RegisterPage/SignIn.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
