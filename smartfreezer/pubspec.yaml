@@ -37,6 +37,8 @@ dependencies:
   flutter_bluetooth_serial: ^0.3.2
   scoped_model: ^1.1.0
   line_chart: ^1.1.11
+  instant: ^0.4.1
+
 
 
 

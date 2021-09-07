@@ -3,17 +3,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../main.dart';
 import 'Edit.dart';
 import 'Info.dart';
 import '../Action.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz;
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+import 'package:timezone/timezone.dart' as tz;
+import 'package:intl/intl.dart';
 
 class YourListViewItem extends StatefulWidget {
   final String title;
@@ -40,7 +39,6 @@ class _YourListViewItemState extends State<YourListViewItem> {
 
   @override
   void initState() {
-    initializing();
     tz.initializeTimeZones();
     final FirebaseDatabase database = FirebaseDatabase();
     _freezerref = db.reference().child(uid);
@@ -76,7 +74,16 @@ class _YourListViewItemState extends State<YourListViewItem> {
                 if (isSwitched == true) {
                   db.child("Time").once().then((DataSnapshot snapshot) {
                     if (snapshot.value == d) {
-                      print("object");
+                      int hour = int.parse(snapshot.value.split(":")[0]);
+                      String min1 = snapshot.value.split(":")[1];
+                      int min = int.parse(min1.split(" ")[0]);
+                      String am = min1.split(" ")[1];
+                      if (am == "PM" && hour !=12) {
+                        hour += 12;
+                        print(hour);
+                        scheduled(hour, min);
+                      }
+                      scheduled(hour, min);
                     }
                   });
                 }
@@ -86,6 +93,43 @@ class _YourListViewItemState extends State<YourListViewItem> {
         ),
       ],
     ));
+  }
+
+  tz.TZDateTime _nextInstanceOfTenAM(int hour, int minute) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  void scheduled(int hour, int minute) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'alarm_notif',
+      'alarm_notif',
+      'Channel for Alarm notification',
+      icon: '@mipmap/ic_launcher',
+      largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
+    );
+
+    var platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        0,
+        'scheduled title',
+        'scheduled body',
+        // _nextInstanceOfTenAM(hour, minute),
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        const NotificationDetails(
+            android: AndroidNotificationDetails('your channel id',
+                'your channel name', 'your channel description')),
+        androidAllowWhileIdle: true,
+        matchDateTimeComponents: DateTimeComponents.time,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
   }
 }
 
@@ -162,12 +206,4 @@ class _FreezerListState extends State<FreezerList> {
       ])),
     );
   }
-}
-
-void initializing() async {
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  final InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
