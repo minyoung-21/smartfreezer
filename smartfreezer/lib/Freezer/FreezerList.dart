@@ -81,9 +81,9 @@ class _YourListViewItemState extends State<YourListViewItem> {
                       if (am == "PM" && hour !=12) {
                         hour += 12;
                         print(hour);
-                        scheduled(hour, min);
+                        scheduled(widget.title,snapshot.value,hour, min);
                       }
-                      scheduled(hour, min);
+                      scheduled(widget.title, snapshot.value,hour, min);
                     }
                   });
                 }
@@ -105,7 +105,7 @@ class _YourListViewItemState extends State<YourListViewItem> {
     return scheduledDate;
   }
 
-  void scheduled(int hour, int minute) async {
+  void scheduled(String freezerName, String selectedTime, int hour, int minute) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'alarm_notif',
       'alarm_notif',
@@ -119,8 +119,8 @@ class _YourListViewItemState extends State<YourListViewItem> {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
-        'scheduled title',
-        'scheduled body',
+        freezerName,
+        selectedTime,
         // _nextInstanceOfTenAM(hour, minute),
         tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
         const NotificationDetails(
