@@ -111,7 +111,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
               Navigator.pushAndRemoveUntil(
                   context,
                   (MaterialPageRoute(
-                      builder: (builder) => ChatPage(server: device))),
+                      builder: (builder) => AddWifiCred(server: device))),
                   (route) => false);
             },
             onLongPress: () async {

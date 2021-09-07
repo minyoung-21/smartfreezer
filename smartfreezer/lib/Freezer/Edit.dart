@@ -58,16 +58,14 @@ class _EditDialogState extends State<EditDialog> {
       .reference()
       .child("Freezer")
       .child("randomly generated");
-  final databaseref2 = FirebaseDatabase.instance.reference().child("User");
+
   void updateData(String time) {
     databaseRef.update({"Time": time}).then((_) {});
-    databaseref2.child(uid).child(fn).update({"Time": time}).then((_) {});
   }
 
   void initState() {
     final FirebaseDatabase database = FirebaseDatabase();
     _freezerref = databaseRef.reference().child(uid);
-    _freezerref2 = databaseref2.reference().child("User").child(uid).child(fn);
 
     super.initState();
     _dateController.text = DateFormat.yMd().format(DateTime.now());

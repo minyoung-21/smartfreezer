@@ -1,7 +1,6 @@
 // ignore: unused_import
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:firebase_database/firebase_database.dart';
@@ -23,7 +22,6 @@ class _AddFreezerState extends State<AddFreezer> {
   final textcontroller = TextEditingController();
   final databaseRef = FirebaseDatabase.instance.reference();
   final uid = FirebaseAuth.instance.currentUser!.uid;
-  final Future<FirebaseApp> _future = Firebase.initializeApp();
   late String _setTime, _setDate;
   late String _hour, _minute, _time;
   late String dateTime;
@@ -51,9 +49,12 @@ class _AddFreezerState extends State<AddFreezer> {
       });
   }
 
-  void addData(String data, String time) {
-    databaseRef.child("User").child(uid).child(data).set(
-        {"FreezerName": data, "RandomGen": rg, "Time": time}).asStream();
+  void addData(String data) {
+    databaseRef
+        .child("User")
+        .child(uid)
+        .child(data)
+        .set({"FreezerName": data, "RandomGen": rg}).asStream();
   }
 
   void addFreez(String time) {
@@ -81,11 +82,10 @@ class _AddFreezerState extends State<AddFreezer> {
   Widget build(BuildContext context) {
     dateTime = DateFormat.yMd().format(DateTime.now());
     return Scaffold(
-      drawer: ActionBut(),
+        drawer: ActionBut(),
         appBar: AppBar(
           title: Text("Add"),
           actions: [
-
             IconButton(
                 onPressed: () async {
                   await authClass.logout();
@@ -133,7 +133,7 @@ class _AddFreezerState extends State<AddFreezer> {
                   child: TextButton(
                       child: Text("Save to Database"),
                       onPressed: () {
-                        addData(textcontroller.text, _timeController.text);
+                        addData(textcontroller.text);
                         addFreez(_timeController.text);
                         textcontroller.clear();
                         Navigator.of(context).pop();

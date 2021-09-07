@@ -8,13 +8,13 @@ import 'package:smartfreezer/Action.dart';
 import 'package:smartfreezer/Freezer/AddFreezer.dart';
 import 'package:smartfreezer/bluetooth/Home.dart';
 
-class ChatPage extends StatefulWidget {
+class AddWifiCred extends StatefulWidget {
   final BluetoothDevice server;
 
-  const ChatPage({required this.server});
+  const AddWifiCred({required this.server});
 
   @override
-  _ChatPage createState() => new _ChatPage();
+  _AddWifiCred createState() => new _AddWifiCred();
 }
 
 class _Message {
@@ -24,7 +24,7 @@ class _Message {
   _Message(this.whom, this.text);
 }
 
-class _ChatPage extends State<ChatPage> {
+class _AddWifiCred extends State<AddWifiCred> {
   static final clientID = 0;
   BluetoothConnection? connection;
 

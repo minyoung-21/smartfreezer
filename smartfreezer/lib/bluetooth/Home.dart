@@ -313,13 +313,17 @@ class _MainPage extends State<MainPage> {
   }
 
   void _startChat(BuildContext context, BluetoothDevice server) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return ChatPage(server: server);
-        },
-      ),
-    );
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (context) {
+    //       return AddWifiCred(server: server);
+    //     },
+    //   ),
+    // );
+    Navigator.pushAndRemoveUntil(
+        context,
+        (MaterialPageRoute(builder: (builder) => AddWifiCred(server: server))),
+        (route) => false);
   }
 
 //   Future<void> _startBackgroundTask(
