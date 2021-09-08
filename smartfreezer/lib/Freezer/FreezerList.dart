@@ -12,7 +12,6 @@ import '../Action.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:intl/intl.dart';
 
 class YourListViewItem extends StatefulWidget {
   final String title;
@@ -121,8 +120,8 @@ class _YourListViewItemState extends State<YourListViewItem> {
         0,
         freezerName,
         selectedTime,
-        // _nextInstanceOfTenAM(hour, minute),
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        _nextInstanceOfTenAM(hour, minute),
+        // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
         const NotificationDetails(
             android: AndroidNotificationDetails('your channel id',
                 'your channel name', 'your channel description')),

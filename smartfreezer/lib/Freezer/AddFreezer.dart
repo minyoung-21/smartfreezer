@@ -55,7 +55,7 @@ class _AddFreezerState extends State<AddFreezer> {
         .child("User")
         .child(uid)
         .child(data)
-        .set({"FreezerName": data, "RandomGen": rg}).asStream();
+        .set({"FreezerName": data, "key": rg}).asStream();
   }
 
   void addFreez(String time) {
