@@ -140,8 +140,12 @@ class _AddWifiCred extends State<AddWifiCred> {
                 return null;
               },
               controller: wifipwd,
+              decoration: InputDecoration(
+                
+        ),
+              ),
             ),
-          ),
+        
           TextButton(
               onPressed: () {
                 if (_formkey2.currentState!.validate()) {
