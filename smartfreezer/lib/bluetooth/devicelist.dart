@@ -14,7 +14,7 @@ class BluetoothDeviceListEntry extends ListTile {
           enabled: enabled,
           leading:
               Icon(Icons.devices), // @TODO . !BluetoothClass! class aware icon
-          title: Text(device.name ?? ""),
+          title: Text(device.name ?? "", style: TextStyle(color:Colors.black),),
           subtitle: Text(device.address.toString()),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
