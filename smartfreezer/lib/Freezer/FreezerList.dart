@@ -77,12 +77,13 @@ class _YourListViewItemState extends State<YourListViewItem> {
                       String min1 = snapshot.value.split(":")[1];
                       int min = int.parse(min1.split(" ")[0]);
                       String am = min1.split(" ")[1];
-                      if (am == "PM" && hour !=12) {
-                        hour += 12;
-                        print(hour);
-                        scheduled(widget.title,snapshot.value,hour, min);
-                      }
+                      // if (am == "PM" && hour !=12) {
+                      //   hour += 12;
+                      //   print(hour);
+                      //   scheduled(widget.title,snapshot.value,hour, min);
+                      // }
                       scheduled(widget.title, snapshot.value,hour, min);
+                      db.update({"Bool": true}).then((_) {});
                     }
                   });
                 }
@@ -120,8 +121,8 @@ class _YourListViewItemState extends State<YourListViewItem> {
         0,
         freezerName,
         selectedTime,
-        _nextInstanceOfTenAM(hour, minute),
-        // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        // _nextInstanceOfTenAM(hour, minute),
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 1)),
         const NotificationDetails(
             android: AndroidNotificationDetails('your channel id',
                 'your channel name', 'your channel description')),
