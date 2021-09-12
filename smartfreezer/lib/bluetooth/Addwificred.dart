@@ -210,7 +210,7 @@ class _AddWifiCred extends State<AddWifiCred> {
   }
 
   void _sendnameandpwd(String name) async {
-    name = name.trim();
+
     wifiname.clear();
     wifipwd.clear();
     Navigator.pushAndRemoveUntil(
