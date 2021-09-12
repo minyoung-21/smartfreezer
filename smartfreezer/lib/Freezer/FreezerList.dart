@@ -172,7 +172,7 @@ class _FreezerListState extends State<FreezerList> {
               children: [
                 YourListViewItem(
                     title: snapshot.value['FreezerName'],
-                    subtitle: snapshot.value['RandomGen']),
+                    subtitle: snapshot.value['key']),
                 Row(
                   children: [
                     TextButton(
