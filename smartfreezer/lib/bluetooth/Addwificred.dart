@@ -189,16 +189,21 @@ class _ChatPage extends State<ChatPage> {
 
   checkConnection() {
     if (messages.last.text == "connected") {
-      return AlertDialog(content: Text("Connected"), actions: [
-        TextButton(
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  (MaterialPageRoute(builder: (builder) => AddFreezer())),
-                  (route) => false);
-            },
-            child: Text("Proceed"))
-      ]);
+      return showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(content: Text("Connected"), actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        (MaterialPageRoute(builder: (builder) => AddFreezer())),
+                        (route) => false);
+                  },
+                  child: Text("Proceed"))
+            ]);
+          });
     } else if (messages.last.text == "notConnected") {
       return SnackBar(
           content: Text("Please check your wifi credentials again"));
@@ -232,12 +237,6 @@ class _ChatPage extends State<ChatPage> {
 
     // Create message if there is new line character
     String dataString = String.fromCharCodes(buffer);
-    if (dataString == "connected") {
-      Navigator.pushAndRemoveUntil(
-          context,
-          (MaterialPageRoute(builder: (builder) => AddFreezer())),
-          (route) => false);
-    }
     int index = buffer.indexOf(13);
     if (~index != 0) {
       setState(() {
