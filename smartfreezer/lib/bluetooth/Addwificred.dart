@@ -195,7 +195,6 @@ class _ChatPage extends State<ChatPage> {
             return AlertDialog(content: Text("Connected"), actions: [
               TextButton(
                   onPressed: () {
-                    Navigator.of(context, rootNavigator: true).pop();
                     Navigator.pushAndRemoveUntil(
                         context,
                         (MaterialPageRoute(builder: (builder) => AddFreezer())),
@@ -257,6 +256,7 @@ class _ChatPage extends State<ChatPage> {
               0, _messageBuffer.length - backspacesCounter)
           : _messageBuffer + dataString);
     }
+    checkConnection();
   }
 
   void _sendwifi(String text) async {
@@ -307,7 +307,6 @@ class _ChatPage extends State<ChatPage> {
         setState(() {});
       }
     }
-    checkConnection();
   }
 
   bool isConnected() {
