@@ -7,12 +7,9 @@ import '../Action.dart';
 class FreezerInfo extends StatefulWidget {
   late final String freezertitle;
 
-
-  FreezerInfo({Key? key, required this.freezertitle})
-      : super(key: key);
+  FreezerInfo({Key? key, required this.freezertitle}) : super(key: key);
   @override
-  _FreezerInfoState createState() =>
-      _FreezerInfoState(this.freezertitle);
+  _FreezerInfoState createState() => _FreezerInfoState(this.freezertitle);
 }
 
 class _FreezerInfoState extends State<FreezerInfo> {
@@ -24,37 +21,61 @@ class _FreezerInfoState extends State<FreezerInfo> {
       FirebaseDatabase.instance.reference().child("Freezer/randomly generated");
   late DatabaseReference _freezerref;
   late DataSnapshot data;
+  var retrieved;
+  temperature() {
+    db.child("Temp").once().then((DataSnapshot snapshot) {
+      setState(() {
+        retrieved = snapshot.value.toString();
+      });
+    });
+  }  
   @override
   void initState() {
     final FirebaseDatabase database = FirebaseDatabase();
-    _freezerref = db.reference().child(uid);
+    _freezerref = db.reference();
+    super.initState();
   }
+
+  
 
   bool isSwitched = false;
   @override
   Widget build(BuildContext context) {
+    temperature();
     return Scaffold(
         drawer: ActionBut(),
         appBar: AppBar(
           centerTitle: true,
           title: Text(freezertitle),
         ),
-        body: Center(
-          child: Transform.scale(
-            scale: 2.0,
-            child: CupertinoSwitch(
-              value: isSwitched,
-              onChanged: (value) {
-                setState(() {
-                  isSwitched = value;
-                  db.update({
-                    'Bool': isSwitched,
-                  }).then((_) {});
-                });
-              },
-              activeColor: Colors.green,
+        body: Column(
+          children: [
+            Container(
+              child: Text(retrieved ?? "" + "C", style: TextStyle(
+                fontSize: 100
+              ),),
             ),
-          ),
+            SizedBox(
+              height: 100,
+            ),
+            Center(
+              child: Transform.scale(
+                scale: 2.0,
+                child: CupertinoSwitch(
+                  value: isSwitched,
+                  onChanged: (value) {
+                    setState(() {
+                      isSwitched = value;
+                      db.update({
+                        'Bool': isSwitched,
+                      }).then((_) {});
+                    });
+                  },
+                  activeColor: Colors.green,
+                ),
+              ),
+            )
+          ],
         ));
   }
 }

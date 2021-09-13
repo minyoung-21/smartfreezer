@@ -5,12 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'package:smartfreezer/bluetooth/MainPage.dart';
 import '../main.dart';
 import 'Edit.dart';
 import 'Info.dart';
 import '../Action.dart';
-import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -59,7 +59,6 @@ class _YourListViewItemState extends State<YourListViewItem> {
   @override
   Widget build(BuildContext context) {
     selectedTime();
-    String d = DateFormat("hh:mm a").format(DateTime.now());
     return Card(
         child: Column(
       children: [
@@ -98,6 +97,7 @@ class _YourListViewItemState extends State<YourListViewItem> {
         ),
       ],
     ));
+    
   }
 
   tz.TZDateTime _nextInstanceOfTenAM(int hour, int minute) {

@@ -23,7 +23,6 @@ class _AddFreezerState extends State<AddFreezer> {
   final databaseRef = FirebaseDatabase.instance.reference();
   final uid = FirebaseAuth.instance.currentUser!.uid;
   final Future<FirebaseApp> _future = Firebase.initializeApp();
-  late String _setTime;
   late String _hour, _minute, _time;
   late String dateTime;
   DateTime selectedDate = DateTime.now();
@@ -110,7 +109,6 @@ class _AddFreezerState extends State<AddFreezer> {
                     child: TextFormField(
                       textAlign: TextAlign.center,
                       onSaved: (String? val) {
-                        _setTime = val!;
                       },
                       enabled: false,
                       keyboardType: TextInputType.text,

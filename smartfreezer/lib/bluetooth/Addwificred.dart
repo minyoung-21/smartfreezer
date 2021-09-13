@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:smartfreezer/Action.dart';
 import 'package:smartfreezer/Freezer/AddFreezer.dart';
 
