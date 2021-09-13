@@ -4,6 +4,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:smartfreezer/Action.dart';
+import 'package:smartfreezer/Freezer/AddFreezer.dart';
 
 class ChatPage extends StatefulWidget {
   final BluetoothDevice server;
@@ -101,6 +103,7 @@ class _ChatPage extends State<ChatPage> {
     }).toList();
 
     return Scaffold(
+      drawer: ActionBut(),
       appBar: AppBar(
           title: (isConnecting
               ? Text('Connecting to ' + widget.server.name! + '...')
@@ -179,6 +182,12 @@ class _ChatPage extends State<ChatPage> {
 
     // Create message if there is new line character
     String dataString = String.fromCharCodes(buffer);
+    if (dataString == "connected") {
+      Navigator.pushAndRemoveUntil(
+          context,
+          (MaterialPageRoute(builder: (builder) => AddFreezer())),
+          (route) => false);
+    }
     int index = buffer.indexOf(13);
     if (~index != 0) {
       setState(() {
