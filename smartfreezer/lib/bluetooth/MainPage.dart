@@ -70,7 +70,7 @@ class _MainPage extends State<MainPage> {
     return Scaffold(
       drawer: ActionBut(),
       appBar: AppBar(
-        title: const Text('Connect Bluetooth with your Freezer'),
+        title: const Text('Bluetooth for Freezer'),
       ),
       body: Container(
         child: ListView(
