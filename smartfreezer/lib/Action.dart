@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:smartfreezer/Freezer/AddFreezer.dart';
-import 'package:smartfreezer/bluetooth/Discovery.dart';
 import 'bluetooth/MainPage.dart';
 import 'Freezer/FreezerList.dart';
 
@@ -42,15 +41,6 @@ class ActionBut extends StatelessWidget {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (builder) => MainPage()),
-                    (route) => false);
-              },
-            ),
-            ListTile(
-              title: Text('Select the Bluetooth device'),
-              onTap: () {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (builder) => DiscoveryPage()),
                     (route) => false);
               },
             ),

@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-import 'package:smartfreezer/Action.dart';
-import 'Addwificred.dart';
 
 import 'devicelist.dart';
 
@@ -18,12 +16,9 @@ class DiscoveryPage extends StatefulWidget {
 }
 
 class _DiscoveryPage extends State<DiscoveryPage> {
-  StreamSubscription<BluetoothDiscoveryResult>? _streamSubscription;
-  List<BluetoothDiscoveryResult> results =
-      List<BluetoothDiscoveryResult>.empty(growable: true);
-  bool isDiscovering = false;
-
-  _DiscoveryPage();
+  late StreamSubscription<BluetoothDiscoveryResult> _streamSubscription;
+  List<BluetoothDiscoveryResult> results = [];
+  late bool isDiscovering;
 
   @override
   void initState() {
@@ -48,16 +43,11 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     _streamSubscription =
         FlutterBluetoothSerial.instance.startDiscovery().listen((r) {
       setState(() {
-        final existingIndex = results.indexWhere(
-            (element) => element.device.address == r.device.address);
-        if (existingIndex >= 0)
-          results[existingIndex] = r;
-        else
-          results.add(r);
+        results.add(r);
       });
     });
 
-    _streamSubscription!.onDone(() {
+    _streamSubscription.onDone(() {
       setState(() {
         isDiscovering = false;
       });
@@ -69,7 +59,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   @override
   void dispose() {
     // Avoid memory leak (`setState` after dispose) and cancel discovery
-    _streamSubscription?.cancel();
+    _streamSubscription.cancel();
 
     super.dispose();
   }
@@ -77,7 +67,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: ActionBut(),
       appBar: AppBar(
         title: isDiscovering
             ? Text('Discovering devices')
@@ -102,68 +91,11 @@ class _DiscoveryPage extends State<DiscoveryPage> {
         itemCount: results.length,
         itemBuilder: (BuildContext context, index) {
           BluetoothDiscoveryResult result = results[index];
-          final device = result.device;
-          final address = device.address;
           return BluetoothDeviceListEntry(
-            device: device,
+            device: result.device,
             rssi: result.rssi,
             onTap: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  (MaterialPageRoute(
-                      builder: (builder) => AddWifiCred(server: device))),
-                  (route) => false);
-            },
-            onLongPress: () async {
-              try {
-                bool bonded = false;
-                if (device.isBonded) {
-                  SnackBar(
-                      content: Text('Unbonding from ${device.address}...'));
-                  await FlutterBluetoothSerial.instance
-                      .removeDeviceBondWithAddress(address);
-                  SnackBar(
-                      content:
-                          Text('Unbonding from ${device.address} has succed'));
-                } else {
-                  SnackBar(content: Text('Bonding with ${device.address}...'));
-                  bonded = (await FlutterBluetoothSerial.instance
-                      .bondDeviceAtAddress(address))!;
-                  SnackBar(
-                      content: Text(
-                          'Bonding with ${device.address} has ${bonded ? 'succed' : 'failed'}.'));
-                }
-                setState(() {
-                  results[results.indexOf(result)] = BluetoothDiscoveryResult(
-                      device: BluetoothDevice(
-                        name: device.name ?? '',
-                        address: address,
-                        type: device.type,
-                        bondState: bonded
-                            ? BluetoothBondState.bonded
-                            : BluetoothBondState.none,
-                      ),
-                      rssi: result.rssi);
-                });
-              } catch (ex) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Error occured while bonding'),
-                      content: Text("${ex.toString()}"),
-                      actions: <Widget>[
-                        new TextButton(
-                          child: new Text("Close"),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              }
+              Navigator.of(context).pop(result.device);
             },
           );
         },
