@@ -110,10 +110,10 @@ class _ChatPage extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
           title: (isConnecting
-              ? Text('Connecting chat to ' + widget.server.name! + '...')
+              ? Text('Connecting to ' + widget.server.name! + '...')
               : isConnected()
-                  ? Text('Live chat with ' + widget.server.name!)
-                  : Text('Chat log with ' + widget.server.name!))),
+                  ? Text('Send Credentials to ' + widget.server.name!)
+                  : Text('Credentials sent to ' + widget.server.name!))),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -135,8 +135,8 @@ class _ChatPage extends State<ChatPage> {
                         hintText: isConnecting
                             ? 'Wait until connected...'
                             : isConnected()
-                                ? 'Type your message...'
-                                : 'Chat got disconnected',
+                                ? 'Type your Credentials...'
+                                : 'Freezer got disconnected',
                         hintStyle: const TextStyle(color: Colors.grey),
                       ),
                       enabled: isConnected(),
