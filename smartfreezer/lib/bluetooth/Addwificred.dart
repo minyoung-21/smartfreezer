@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:smartfreezer/Action.dart';
 import 'package:smartfreezer/Freezer/AddFreezer.dart';
 
@@ -30,10 +31,8 @@ class _ChatPage extends State<ChatPage> {
   List<_Message> messages = [];
   String _messageBuffer = '';
 
-  final TextEditingController wifiname =
-      new TextEditingController();
-      final TextEditingController wifipass =
-      new TextEditingController();
+  final TextEditingController wifiname = new TextEditingController();
+  final TextEditingController wifipass = new TextEditingController();
   final ScrollController listScrollController = new ScrollController();
 
   bool isConnecting = true;
@@ -80,29 +79,29 @@ class _ChatPage extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Row> list = messages.map((_message) {
-      return Row(
-        children: <Widget>[
-          Container(
-            child: Text(
-                (text) {
-                  return text == '/shrug' ? '¯\\_(ツ)_/¯' : text;
-                }(_message.text.trim()),
-                style: TextStyle(color: Colors.white)),
-            padding: EdgeInsets.all(12.0),
-            margin: EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
-            width: 222.0,
-            decoration: BoxDecoration(
-                color:
-                    _message.whom == clientID ? Colors.blueAccent : Colors.grey,
-                borderRadius: BorderRadius.circular(7.0)),
-          ),
-        ],
-        mainAxisAlignment: _message.whom == clientID
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
-      );
-    }).toList();
+    // final List<Row> list = messages.map((_message) {
+    //   return Row(
+    //     children: <Widget>[
+    //       Container(
+    //         child: Text(
+    //             (text) {
+    //               return text == '/shrug' ? '¯\\_(ツ)_/¯' : text;
+    //             }(_message.text.trim()),
+    //             style: TextStyle(color: Colors.white)),
+    //         padding: EdgeInsets.all(12.0),
+    //         margin: EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
+    //         width: 222.0,
+    //         decoration: BoxDecoration(
+    //             color:
+    //                 _message.whom == clientID ? Colors.blueAccent : Colors.grey,
+    //             borderRadius: BorderRadius.circular(7.0)),
+    //       ),
+    //     ],
+    //     mainAxisAlignment: _message.whom == clientID
+    //         ? MainAxisAlignment.end
+    //         : MainAxisAlignment.start,
+    //   );
+    // }).toList();
 
     return Scaffold(
       drawer: ActionBut(),
@@ -149,7 +148,6 @@ class _ChatPage extends State<ChatPage> {
                           ? () => _sendwifi(wifiname.text)
                           : null),
                 ),
-                
               ],
             ),
             Row(
@@ -181,13 +179,30 @@ class _ChatPage extends State<ChatPage> {
                           ? () => _sendpass(wifipass.text)
                           : null),
                 ),
-                
               ],
             )
           ],
         ),
       ),
     );
+  }
+
+  checkConnection() {
+    if (messages.last.text == "connected") {
+      return AlertDialog(content: Text("Connected"), actions: [
+        TextButton(
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  (MaterialPageRoute(builder: (builder) => AddFreezer())),
+                  (route) => false);
+            },
+            child: Text("Proceed"))
+      ]);
+    } else if (messages.last.text == "notConnected") {
+      return SnackBar(
+          content: Text("Please check your wifi credentials again"));
+    }
   }
 
   void _onDataReceived(Uint8List data) {
@@ -246,7 +261,6 @@ class _ChatPage extends State<ChatPage> {
   }
 
   void _sendwifi(String text) async {
-
     wifiname.clear();
 
     if (text.length > 0) {
@@ -270,8 +284,8 @@ class _ChatPage extends State<ChatPage> {
       }
     }
   }
-    void _sendpass(String text) async {
 
+  void _sendpass(String text) async {
     wifipass.clear();
 
     if (text.length > 0) {
@@ -294,6 +308,7 @@ class _ChatPage extends State<ChatPage> {
         setState(() {});
       }
     }
+    checkConnection();
   }
 
   bool isConnected() {
