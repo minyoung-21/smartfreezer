@@ -247,7 +247,7 @@ class _ChatPage extends State<ChatPage> {
 
   void _sendwifi(String text) async {
 
-    wifipass.clear();
+    wifiname.clear();
 
     if (text.length > 0) {
       try {
@@ -271,7 +271,8 @@ class _ChatPage extends State<ChatPage> {
     }
   }
     void _sendpass(String text) async {
-    wifiname.clear();
+
+    wifipass.clear();
 
     if (text.length > 0) {
       try {
