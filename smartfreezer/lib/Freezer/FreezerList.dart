@@ -77,13 +77,19 @@ class _YourListViewItemState extends State<YourListViewItem> {
                     String min1 = snapshot.value.split(":")[1];
                     int min = int.parse(min1.split(" ")[0]);
                     String am = min1.split(" ")[1];
-                    // if (am == "PM" && hour !=12) {
-                    //   hour += 12;
-                    //   print(hour);
-                    //   scheduled(widget.title,snapshot.value,hour, min);
-                    // }
-
-                    _scheduleDailyTenAMNotification(widget.title, snapshot.value, hour, min);
+                    if (am == "PM" && hour != 12) {
+                      hour += 12;
+                      print(hour);
+                      _scheduleDailyTenAMNotification(
+                          widget.title, snapshot.value, hour, min);
+                    } else if (hour == 12 && am == "AM") {
+                      hour = 0;
+                      _scheduleDailyTenAMNotification(
+                          widget.title, snapshot.value, hour, min);
+                    } else {
+                      _scheduleDailyTenAMNotification(
+                          widget.title, snapshot.value, hour, min);
+                    }
                   });
                 }
               });
@@ -104,7 +110,9 @@ class _YourListViewItemState extends State<YourListViewItem> {
     // }
     return scheduledDate;
   }
-Future<void> _scheduleDailyTenAMNotification(String title, String subtitle, int hour, int minute) async {
+
+  Future<void> _scheduleDailyTenAMNotification(
+      String title, String subtitle, int hour, int minute) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
         title,
