@@ -48,7 +48,7 @@ class _FreezerInfoState extends State<FreezerInfo> {
                 setState(() {
                   isSwitched = value;
                   db.update({
-                    'freezerbool': isSwitched,
+                    'Bool': isSwitched,
                   }).then((_) {});
                 });
               },

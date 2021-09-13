@@ -128,6 +128,7 @@ class _MainPage extends State<MainPage> {
                       ),
                     );
 
+                    // ignore: unnecessary_null_comparison
                     if (selectedDevice != null) {
                       print('Discovery -> selected ' + selectedDevice.address);
                       _startChat(context, selectedDevice);
