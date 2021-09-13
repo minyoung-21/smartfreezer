@@ -127,13 +127,15 @@ class _MainPage extends State<MainPage> {
                         },
                       ),
                     );
-
                     // ignore: unnecessary_null_comparison
                     if (selectedDevice != null) {
-                      print('Discovery -> selected ' + selectedDevice.address);
+                      SnackBar(
+                          content: Text('Discovery -> selected ' +
+                              selectedDevice.address));
                       _startChat(context, selectedDevice);
                     } else {
-                      print('Discovery -> no device selected');
+                      SnackBar(
+                          content: Text('Discovery -> no device selected'));
                     }
                   }),
             ),

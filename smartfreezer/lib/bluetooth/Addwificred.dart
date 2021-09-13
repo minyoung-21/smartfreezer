@@ -176,7 +176,14 @@ class _ChatPage extends State<ChatPage> {
                   child: IconButton(
                       icon: const Icon(Icons.send),
                       onPressed: isConnected()
-                          ? () => _sendpass(wifipass.text)
+                          ? () {
+                              _sendpass(wifipass.text);
+                              final snackBar = SnackBar(
+                                content: Text("Connecting...."),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
                           : null),
                 ),
               ],
