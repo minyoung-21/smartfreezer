@@ -73,19 +73,17 @@ class _YourListViewItemState extends State<YourListViewItem> {
                 isSwitched = value;
                 if (isSwitched == true) {
                   db.child("Time").once().then((DataSnapshot snapshot) {
-                    if (snapshot.value == d) {
-                      int hour = int.parse(snapshot.value.split(":")[0]);
-                      String min1 = snapshot.value.split(":")[1];
-                      int min = int.parse(min1.split(" ")[0]);
-                      String am = min1.split(" ")[1];
-                      // if (am == "PM" && hour !=12) {
-                      //   hour += 12;
-                      //   print(hour);
-                      //   scheduled(widget.title,snapshot.value,hour, min);
-                      // }
-                      scheduled(widget.title, snapshot.value, hour, min);
-                      db.update({"Bool": true}).then((_) {});
-                    }
+                    int hour = int.parse(snapshot.value.split(":")[0]);
+                    String min1 = snapshot.value.split(":")[1];
+                    int min = int.parse(min1.split(" ")[0]);
+                    String am = min1.split(" ")[1];
+                    // if (am == "PM" && hour !=12) {
+                    //   hour += 12;
+                    //   print(hour);
+                    //   scheduled(widget.title,snapshot.value,hour, min);
+                    // }
+
+                    _scheduleDailyTenAMNotification(widget.title, snapshot.value, hour, min);
                   });
                 }
               });
@@ -100,38 +98,28 @@ class _YourListViewItemState extends State<YourListViewItem> {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate =
         tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
+
+    // if (scheduledDate.isBefore(now)) {
+    //   scheduledDate = scheduledDate.add(const Duration(days: 1));
+    // }
     return scheduledDate;
   }
-
-  void scheduled(
-      String freezerName, String selectedTime, int hour, int minute) async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'alarm_notif',
-      'alarm_notif',
-      'Channel for Alarm notification',
-      icon: '@mipmap/ic_launcher',
-      largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
-    );
-
-    var platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
+Future<void> _scheduleDailyTenAMNotification(String title, String subtitle, int hour, int minute) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
-        freezerName,
-        selectedTime,
+        title,
+        subtitle,
         _nextInstanceOfTenAM(hour, minute),
-        // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 1)),
         const NotificationDetails(
-            android: AndroidNotificationDetails('your channel id',
-                'your channel name', 'your channel description')),
+          android: AndroidNotificationDetails(
+              'daily notification channel id',
+              'daily notification channel name',
+              'daily notification description'),
+        ),
         androidAllowWhileIdle: true,
-        matchDateTimeComponents: DateTimeComponents.time,
         uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime);
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time);
   }
 }
 
