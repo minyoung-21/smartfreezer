@@ -105,7 +105,7 @@ class _AddWifiCred extends State<AddWifiCred> {
                 ? Text('Connecting to ' + serverName + '...')
                 : isConnected
                     ? Text('Send your wifi credentials to ' + serverName)
-                    : Text('Your wifi credentials ' + serverName))),
+                    : Text('Connecting to' + serverName))),
         body: Column(children: <Widget>[
           Form(
             key: _formkey,
@@ -119,17 +119,6 @@ class _AddWifiCred extends State<AddWifiCred> {
               controller: wifiname,
             ),
           ),
-          TextButton(
-              onPressed: () {
-                if (_formkey.currentState!.validate()) {
-                  if (isConnected != false) {
-                    _sendnameandpwd(wifiname.text);
-                  } else {
-                    showsnackbar();
-                  }
-                }
-              },
-              child: Text("Send Name")),
           Form(
             key: _formkey2,
             child: TextFormField(
