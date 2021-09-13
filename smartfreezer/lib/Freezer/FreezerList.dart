@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:smartfreezer/bluetooth/Home.dart';
 import '../main.dart';
 import 'Edit.dart';
 import 'Info.dart';
@@ -82,7 +83,7 @@ class _YourListViewItemState extends State<YourListViewItem> {
                       //   print(hour);
                       //   scheduled(widget.title,snapshot.value,hour, min);
                       // }
-                      scheduled(widget.title, snapshot.value,hour, min);
+                      scheduled(widget.title, snapshot.value, hour, min);
                       db.update({"Bool": true}).then((_) {});
                     }
                   });
@@ -105,7 +106,8 @@ class _YourListViewItemState extends State<YourListViewItem> {
     return scheduledDate;
   }
 
-  void scheduled(String freezerName, String selectedTime, int hour, int minute) async {
+  void scheduled(
+      String freezerName, String selectedTime, int hour, int minute) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'alarm_notif',
       'alarm_notif',
@@ -121,7 +123,7 @@ class _YourListViewItemState extends State<YourListViewItem> {
         0,
         freezerName,
         selectedTime,
-         _nextInstanceOfTenAM(hour, minute),
+        _nextInstanceOfTenAM(hour, minute),
         // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 1)),
         const NotificationDetails(
             android: AndroidNotificationDetails('your channel id',
@@ -147,10 +149,12 @@ class _FreezerListState extends State<FreezerList> {
   final uid = FirebaseAuth.instance.currentUser!.uid;
 
   late DatabaseReference _freezerref;
+  late DatabaseReference _deleteRef;
   @override
   void initState() {
     final FirebaseDatabase database = FirebaseDatabase();
     _freezerref = databaseRef.reference().child("User").child(uid);
+    _deleteRef = databaseRef.reference();
     super.initState();
   }
 
@@ -196,7 +200,18 @@ class _FreezerListState extends State<FreezerList> {
                                       )),
                               (route) => false);
                         },
-                        child: Text("Info"))
+                        child: Text("Info")),
+                    TextButton(
+                        onPressed: () {
+                          _deleteRef.child("Freezer").remove();
+                          _deleteRef.child("User").remove();
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              (MaterialPageRoute(
+                                  builder: (builder) => MainPage())),
+                              (route) => false);
+                        },
+                        child: Text("Delete"))
                   ],
                 )
               ],
