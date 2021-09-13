@@ -43,7 +43,7 @@ class _AddWifiCred extends State<AddWifiCred> {
     super.initState();
 
     BluetoothConnection.toAddress(widget.server.address).then((_connection) {
-      print('Connected to the device');
+      showsnackBar3('Connected to the device');
       connection = _connection;
       setState(() {
         isConnecting = false;
@@ -52,18 +52,26 @@ class _AddWifiCred extends State<AddWifiCred> {
 
       connection!.input!.listen(_onDataReceived).onDone(() {
         if (isDisconnecting) {
-          print('Disconnecting locally!');
+          showsnackBar3('Disconnecting locally!');
         } else {
-          print('Disconnected remotely!');
+          showsnackBar3('Disconnected remotely!');
         }
         if (this.mounted) {
           setState(() {});
         }
       });
     }).catchError((error) {
-      print('Cannot connect, exception occured');
-      print(error);
+      showsnackBar2(error);
     });
+  }
+
+  showsnackBar2(String errorMsg) {
+    final snackBar =
+        SnackBar(content: Text("Cannot connect, exception occured" + errorMsg));
+  }
+  showsnackBar3(String msg) {
+    final snackBar =
+        SnackBar(content: Text(msg));
   }
 
   @override
@@ -129,12 +137,9 @@ class _AddWifiCred extends State<AddWifiCred> {
                 return null;
               },
               controller: wifipwd,
-              decoration: InputDecoration(
-                
-        ),
-              ),
+              decoration: InputDecoration(),
             ),
-        
+          ),
           TextButton(
               onPressed: () {
                 if (_formkey2.currentState!.validate()) {
@@ -180,7 +185,7 @@ class _AddWifiCred extends State<AddWifiCred> {
     // Create message if there is new line character
     String dataString = String.fromCharCodes(buffer);
     int index = buffer.indexOf(13);
-    print(dataString);
+    showsnackBar3(dataString);
     // if (~index != 0) {
     //   setState(() {
     //     messages.add(
@@ -203,7 +208,6 @@ class _AddWifiCred extends State<AddWifiCred> {
   }
 
   void _sendnameandpwd(String name) async {
-
     wifiname.clear();
     wifipwd.clear();
     Navigator.pushAndRemoveUntil(
