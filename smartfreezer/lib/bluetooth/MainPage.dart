@@ -28,7 +28,7 @@ class _MainPage extends State<MainPage> {
 
     Future.doWhile(() async {
       // Wait if adapter not enabled
-      if (await FlutterBluetoothSerial.instance.isEnabled?? true) {
+      if (await FlutterBluetoothSerial.instance.isEnabled ?? true) {
         return false;
       }
       await Future.delayed(Duration(milliseconds: 0xDD));
@@ -115,8 +115,7 @@ class _MainPage extends State<MainPage> {
             Divider(),
             ListTile(
               title: TextButton(
-                  child:
-                      const Text('Connect to your freezer'),
+                  child: const Text('Connect to your freezer'),
                   onPressed: () async {
                     final BluetoothDevice selectedDevice =
                         await Navigator.of(context).push(
@@ -142,12 +141,9 @@ class _MainPage extends State<MainPage> {
   }
 
   void _startChat(BuildContext context, BluetoothDevice server) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return ChatPage(server: server);
-        },
-      ),
-    );
+    Navigator.pushAndRemoveUntil(
+        context,
+        (MaterialPageRoute(builder: (builder) => ChatPage(server: server))),
+        (route) => false);
   }
 }
