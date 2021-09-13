@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:smartfreezer/RegisterPage/Auth.dart';
-import 'package:smartfreezer/bluetooth/Home.dart';
+import 'package:smartfreezer/bluetooth/MainPage.dart';
 import 'package:smartfreezer/RegisterPage/SignIn.dart';
 
 class SignUp extends StatefulWidget {

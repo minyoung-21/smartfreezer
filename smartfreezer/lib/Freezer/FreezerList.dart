@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:smartfreezer/bluetooth/Home.dart';
+import 'package:smartfreezer/bluetooth/MainPage.dart';
 import '../main.dart';
 import 'Edit.dart';
 import 'Info.dart';

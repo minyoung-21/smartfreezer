@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartfreezer/Freezer/AddFreezer.dart';
 import 'package:smartfreezer/bluetooth/Discovery.dart';
-import 'bluetooth/Home.dart';
+import 'bluetooth/MainPage.dart';
 import 'Freezer/FreezerList.dart';
 
 class ActionBut extends StatelessWidget {

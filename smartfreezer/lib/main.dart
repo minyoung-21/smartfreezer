@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:smartfreezer/RegisterPage/Auth.dart';
-import 'package:smartfreezer/bluetooth/Home.dart';
+import 'package:smartfreezer/bluetooth/MainPage.dart';
 import 'package:smartfreezer/RegisterPage/SignIn.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 

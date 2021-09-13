@@ -74,13 +74,13 @@ class _MainPage extends State<MainPage> {
     });
   }
 
-  @override
-  void dispose() {
-    FlutterBluetoothSerial.instance.setPairingRequestHandler(null);
-    // _collectingTask?.dispose();
-    _discoverableTimeoutTimer?.cancel();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   FlutterBluetoothSerial.instance.setPairingRequestHandler(null);
+  //   // _collectingTask?.dispose();
+  //   _discoverableTimeoutTimer?.cancel();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

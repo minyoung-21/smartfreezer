@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:smartfreezer/Action.dart';
 import 'package:smartfreezer/Freezer/AddFreezer.dart';
-import 'package:smartfreezer/bluetooth/Home.dart';
+import 'package:smartfreezer/bluetooth/MainPage.dart';
 
 class AddWifiCred extends StatefulWidget {
   final BluetoothDevice server;
@@ -43,7 +43,7 @@ class _AddWifiCred extends State<AddWifiCred> {
     super.initState();
 
     BluetoothConnection.toAddress(widget.server.address).then((_connection) {
-      showsnackBar3('Connected to the device');
+      print('Connected to the device');
       connection = _connection;
       setState(() {
         isConnecting = false;
@@ -52,26 +52,27 @@ class _AddWifiCred extends State<AddWifiCred> {
 
       connection!.input!.listen(_onDataReceived).onDone(() {
         if (isDisconnecting) {
-          showsnackBar3('Disconnecting locally!');
+          showsnackBar3();
         } else {
-          showsnackBar3('Disconnected remotely!');
+          print('Disconnected remotely!');
         }
         if (this.mounted) {
           setState(() {});
         }
       });
     }).catchError((error) {
-      showsnackBar2(error);
+      showsnackBar2();
+      print(error);
     });
   }
 
-  showsnackBar2(String errorMsg) {
+  showsnackBar2() {
     final snackBar =
-        SnackBar(content: Text("Cannot connect, exception occured" + errorMsg));
+        SnackBar(content: const Text("Cannot connect, exception occured"));
   }
-  showsnackBar3(String msg) {
-    final snackBar =
-        SnackBar(content: Text(msg));
+
+  showsnackBar3() {
+    final snackBar = SnackBar(content: const Text('Disconnecting locally!'));
   }
 
   @override
@@ -185,7 +186,7 @@ class _AddWifiCred extends State<AddWifiCred> {
     // Create message if there is new line character
     String dataString = String.fromCharCodes(buffer);
     int index = buffer.indexOf(13);
-    showsnackBar3(dataString);
+    print(dataString);
     // if (~index != 0) {
     //   setState(() {
     //     messages.add(
