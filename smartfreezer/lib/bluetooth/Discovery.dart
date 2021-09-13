@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:smartfreezer/Action.dart';
 import 'devicelist.dart';
 
 class DiscoveryPage extends StatefulWidget {
@@ -65,6 +66,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: ActionBut(),
       appBar: AppBar(
         title: isDiscovering
             ? Text('Discovering devices')

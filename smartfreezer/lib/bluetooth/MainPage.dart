@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:smartfreezer/Action.dart';
 import 'Addwificred.dart';
 import 'Discovery.dart';
 
@@ -67,6 +68,7 @@ class _MainPage extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: ActionBut(),
       appBar: AppBar(
         title: const Text('Connect Bluetooth with your Freezer'),
       ),
@@ -118,13 +120,11 @@ class _MainPage extends State<MainPage> {
                   child: const Text('Connect to your freezer'),
                   onPressed: () async {
                     final BluetoothDevice selectedDevice =
-                        await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return DiscoveryPage();
-                        },
-                      ),
-                    );
+                        await Navigator.pushAndRemoveUntil(
+                            context,
+                            (MaterialPageRoute(
+                                builder: (builder) => DiscoveryPage())),
+                            (route) => false);
 
                     if (selectedDevice != null) {
                       print('Discovery -> selected ' + selectedDevice.address);
