@@ -113,12 +113,12 @@ class _ChatPage extends State<ChatPage> {
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            Flexible(
-              child: ListView(
-                  padding: const EdgeInsets.all(12.0),
-                  controller: listScrollController,
-                  children: list),
-            ),
+            // Flexible(
+            //   child: ListView(
+            //       padding: const EdgeInsets.all(12.0),
+            //       controller: listScrollController,
+            //       children: list),
+            // ),
             Row(
               children: <Widget>[
                 Flexible(
@@ -131,7 +131,7 @@ class _ChatPage extends State<ChatPage> {
                         hintText: isConnecting
                             ? 'Wait until connected...'
                             : isConnected()
-                                ? 'Type your Credentials...'
+                                ? 'Type your WIFI Name...'
                                 : 'Freezer got disconnected',
                         hintStyle: const TextStyle(color: Colors.grey),
                       ),
@@ -147,6 +147,39 @@ class _ChatPage extends State<ChatPage> {
                           ? () => _sendMessage(textEditingController.text)
                           : null),
                 ),
+                
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 16.0),
+                    child: TextField(
+                      style: const TextStyle(fontSize: 15.0),
+                      controller: textEditingController,
+                      obscureText: true,
+                      decoration: InputDecoration.collapsed(
+                        hintText: isConnecting
+                            ? 'Wait until connected...'
+                            : isConnected()
+                                ? 'Type your WIFI Password...'
+                                : 'Freezer got disconnected',
+                        hintStyle: const TextStyle(color: Colors.grey),
+                      ),
+                      enabled: isConnected(),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(8.0),
+                  child: IconButton(
+                      icon: const Icon(Icons.send),
+                      onPressed: isConnected()
+                          ? () => _sendMessage(textEditingController.text)
+                          : null),
+                ),
+                
               ],
             )
           ],
