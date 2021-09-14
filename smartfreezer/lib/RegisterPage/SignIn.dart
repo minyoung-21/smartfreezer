@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartfreezer/Freezer/AddFreezer.dart';
+import 'package:smartfreezer/Freezer/FreezerList.dart';
 import 'package:smartfreezer/RegisterPage/SignUp.dart';
 import 'Auth.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -73,7 +73,7 @@ class _SignInState extends State<SignIn> {
             });
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (builder) => AddFreezer()),
+                MaterialPageRoute(builder: (builder) => FreezerList()),
                 (route) => false);
           } catch (e) {
             final snackbar = SnackBar(content: Text(e.toString()));
