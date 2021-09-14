@@ -107,7 +107,7 @@ class _AddWifiCred extends State<AddWifiCred> {
                               ],
                             );
                           })
-                      : text+"Please try again";
+                      : text;
                 }(_message.text.trim()),
                 style: TextStyle(color: Colors.white)),
             padding: EdgeInsets.all(12.0),
