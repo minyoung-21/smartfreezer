@@ -1,11 +1,9 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:smartfreezer/Action.dart';
-import 'package:smartfreezer/Freezer/AddFreezer.dart';
 
 class AddWifiCred extends StatefulWidget {
   final BluetoothDevice server;
@@ -96,17 +94,7 @@ class _AddWifiCred extends State<AddWifiCred> {
             child: Text(
                 (text) {
                   return text == 'connected'
-                      ? showDialog(
-                          context: context,
-                          builder: (_) {
-                            return AlertDialog(
-                              content: Text("Connected Successfully"),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {}, child: Text("Proceed"))
-                              ],
-                            );
-                          })
+                      ? "Connected"
                       : text;
                 }(_message.text.trim()),
                 style: TextStyle(color: Colors.white)),
@@ -231,7 +219,7 @@ class _AddWifiCred extends State<AddWifiCred> {
   //   }
   // }
 
-  _onDataReceived(Uint8List data) {
+  void _onDataReceived(Uint8List data) {
     // Allocate buffer for parsed data
     int backspacesCounter = 0;
     data.forEach((byte) {
@@ -280,6 +268,7 @@ class _AddWifiCred extends State<AddWifiCred> {
     }
   }
 
+//send wifi Credentials
   void _sendWifiCred(String name, String pass) async {
     wifiname.clear();
     wifipass.clear();
