@@ -89,6 +89,7 @@ class _AddWifiCred extends State<AddWifiCred> {
   var _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    checkConnection();
     // final List<Row> list = messages.map((_message) {
     //   return Row(
     //     children: <Widget>[
