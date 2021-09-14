@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:smartfreezer/Action.dart';
@@ -87,29 +86,23 @@ class _AddWifiCred extends State<AddWifiCred> {
   var _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final List<Row> list = messagesReceived.map((_message) {
+    final List<Row> list = messagesReceived.map((_messagesReceived) {
       return Row(
         children: <Widget>[
           Container(
             child: Text(
                 (text) {
-                  return text == 'connected'
-                      ? "Connected"
-                      : text;
-                }(_message.text.trim()),
+                  return text == 'connected' ? "Connected" : text;
+                }(_messagesReceived.text),
                 style: TextStyle(color: Colors.white)),
             padding: EdgeInsets.all(12.0),
             margin: EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
             width: 222.0,
             decoration: BoxDecoration(
-                color:
-                    _message.whom == clientID ? Colors.blueAccent : Colors.grey,
-                borderRadius: BorderRadius.circular(7.0)),
+                color: Colors.grey, borderRadius: BorderRadius.circular(7.0)),
           ),
         ],
-        mainAxisAlignment: _message.whom == clientID
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
       );
     }).toList();
 
@@ -170,8 +163,14 @@ class _AddWifiCred extends State<AddWifiCred> {
                 if (isConnected()) {
                   if (_formkey.currentState!.validate()) {
                     _sendWifiCred(wifiname.text, wifipass.text);
-                    final snackBar = SnackBar(content: Text("Connecting...."));
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    final snackBar1 = SnackBar(content: Text("Connecting...."));
+                    if (true) {
+                      Future.delayed(const Duration(seconds: 2), () {});
+                      final snackBar =
+                          SnackBar(content: Text("Connecting...."));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar1);
                   }
                 }
               },
@@ -184,40 +183,6 @@ class _AddWifiCred extends State<AddWifiCred> {
           ),
         ])));
   }
-
-  // checkConnection() {
-  //   if (messagesReceived.last.text == "connected") {
-  //     return showDialog(
-  //         context: context,
-  //         builder: (_) {
-  //           return AlertDialog(content: Text("Connected"), actions: [
-  //             TextButton(
-  //                 onPressed: () {
-  //                   Navigator.pushAndRemoveUntil(
-  //                       context,
-  //                       (MaterialPageRoute(builder: (builder) => AddFreezer())),
-  //                       (route) => false);
-  //                 },
-  //                 child: Text("Proceed"))
-  //           ]);
-  //         });
-  //   } else {
-  //     return showDialog(
-  //         context: context,
-  //         builder: (_) {
-  //           return AlertDialog(
-  //             content: Text("Not Connected"),
-  //             actions: [
-  //               TextButton(
-  //                   onPressed: () {
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                   child: Text("Type Credentials Again"))
-  //             ],
-  //           );
-  //         });
-  //   }
-  // }
 
   void _onDataReceived(Uint8List data) {
     // Allocate buffer for parsed data
