@@ -148,7 +148,7 @@ class _MainPage extends State<MainPage> {
   void _startChat(BuildContext context, BluetoothDevice server) {
     Navigator.pushAndRemoveUntil(
         context,
-        (MaterialPageRoute(builder: (builder) => ChatPage(server: server))),
+        (MaterialPageRoute(builder: (builder) => AddWifiCred(server: server))),
         (route) => false);
   }
 }

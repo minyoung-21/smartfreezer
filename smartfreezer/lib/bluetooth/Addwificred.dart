@@ -7,27 +7,37 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:smartfreezer/Action.dart';
 import 'package:smartfreezer/Freezer/AddFreezer.dart';
 
-class ChatPage extends StatefulWidget {
+class AddWifiCred extends StatefulWidget {
   final BluetoothDevice server;
 
-  const ChatPage({required this.server});
+  const AddWifiCred({required this.server});
 
   @override
-  _ChatPage createState() => new _ChatPage();
+  _AddWifiCred createState() => new _AddWifiCred();
 }
 
-class _Message {
+class _MessageReceived {
   int whom;
   String text;
 
-  _Message(this.whom, this.text);
+  _MessageReceived(this.whom, this.text);
 }
 
-class _ChatPage extends State<ChatPage> {
+class _MessageSent {
+  int whom;
+  String nameofWifi;
+  String passofWifi;
+
+  _MessageSent(this.whom, this.nameofWifi, this.passofWifi);
+}
+
+class _AddWifiCred extends State<AddWifiCred> {
   static final clientID = 0;
   var connection; //BluetoothConnection
 
-  List<_Message> messages = [];
+  List<_MessageReceived> messagesReceived = [];
+  List<_MessageSent> messagesSent = [];
+
   String _messageBuffer = '';
 
   final TextEditingController wifiname = new TextEditingController();
@@ -76,6 +86,7 @@ class _ChatPage extends State<ChatPage> {
     super.dispose();
   }
 
+  var _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     // final List<Row> list = messages.map((_message) {
@@ -103,98 +114,79 @@ class _ChatPage extends State<ChatPage> {
     // }).toList();
 
     return Scaffold(
-      drawer: ActionBut(),
-      appBar: AppBar(
-          title: (isConnecting
-              ? Text('Connecting to ' + widget.server.name! + '...')
-              : isConnected()
-                  ? Text('Send Credentials to ' + widget.server.name!)
-                  : Text('Credentials sent to ' + widget.server.name!))),
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            // Flexible(
-            //   child: ListView(
-            //       padding: const EdgeInsets.all(12.0),
-            //       controller: listScrollController,
-            //       children: list),
-            // ),
-            Row(
-              children: <Widget>[
-                Flexible(
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 16.0),
-                    child: TextField(
-                      style: const TextStyle(fontSize: 15.0),
-                      controller: wifiname,
-                      decoration: InputDecoration.collapsed(
-                        hintText: isConnecting
-                            ? 'Wait until connected...'
-                            : isConnected()
-                                ? 'Type your WIFI Name...'
-                                : 'Freezer got disconnected',
-                        hintStyle: const TextStyle(color: Colors.grey),
-                      ),
-                      enabled: isConnected(),
-                    ),
-                  ),
+        drawer: ActionBut(),
+        appBar: AppBar(
+            title: (isConnecting
+                ? Text('Connecting to ' + widget.server.name! + '...')
+                : isConnected()
+                    ? Text('Send Credentials to ' + widget.server.name!)
+                    : Text('Credentials sent to ' + widget.server.name!))),
+        body: SafeArea(
+            child: Column(children: <Widget>[
+          // Flexible(
+          //   child: ListView(
+          //       padding: const EdgeInsets.all(12.0),
+          //       controller: listScrollController,
+          //       children: list),
+          // ),
+          Form(
+            key: _formkey,
+            child: Column(children: [
+              TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your WIFI NAME';
+                  }
+                  return null;
+                },
+                controller: wifiname,
+                decoration: InputDecoration(
+                  hintText: isConnecting
+                      ? 'Wait until connected...'
+                      : isConnected()
+                          ? 'Type your WIFI Name...'
+                          : 'Freezer got disconnected',
+                  hintStyle: const TextStyle(color: Colors.grey),
                 ),
-                Container(
-                  margin: const EdgeInsets.all(8.0),
-                  child: IconButton(
-                      icon: const Icon(Icons.send),
-                      onPressed: isConnected()
-                          ? () => _sendwifi(wifiname.text)
-                          : null),
+                enabled: isConnected(),
+              ),
+              TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter your WIFI PASSWORD";
+                  }
+                  return null;
+                },
+                controller: wifipass,
+                obscureText: true,
+                decoration: InputDecoration(
+                  hintText: isConnecting
+                      ? 'Wait until connected...'
+                      : isConnected()
+                          ? 'Type your WIFI Password...'
+                          : 'Freezer got disconnected',
+                  hintStyle: const TextStyle(color: Colors.grey),
                 ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Flexible(
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 16.0),
-                    child: TextField(
-                      style: const TextStyle(fontSize: 15.0),
-                      controller: wifipass,
-                      obscureText: true,
-                      decoration: InputDecoration.collapsed(
-                        hintText: isConnecting
-                            ? 'Wait until connected...'
-                            : isConnected()
-                                ? 'Type your WIFI Password...'
-                                : 'Freezer got disconnected',
-                        hintStyle: const TextStyle(color: Colors.grey),
-                      ),
-                      enabled: isConnected(),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.all(8.0),
-                  child: IconButton(
-                      icon: const Icon(Icons.send),
-                      onPressed: isConnected()
-                          ? () {
-                              _sendpass(wifipass.text);
-                              final snackBar = SnackBar(
-                                content: Text("Connecting...."),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            }
-                          : null),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+                enabled: isConnected(),
+              ),
+            ]),
+          ),
+          TextButton(
+              onPressed: () {
+                if (isConnected()) {
+                  if (_formkey.currentState!.validate()) {
+                    _sendWifiCred(wifiname.text, wifipass.text);
+                    final snackBar = SnackBar(content: Text("Connecting...."));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                }
+              },
+              child: Text("Send WIFI Credentials"))
+        ])));
   }
 
   checkConnection() {
-    if (messages.last.text == "connected") {
+    if (messagesReceived.last.text == "connected") {
       return showDialog(
           context: context,
           builder: (_) {
@@ -209,9 +201,21 @@ class _ChatPage extends State<ChatPage> {
                   child: Text("Proceed"))
             ]);
           });
-    } else if (messages.last.text == "notConnected") {
-      return SnackBar(
-          content: Text("Please check your wifi credentials again"));
+    } else {
+      return showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              content: Text("Not Connected"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Type Credentials Again"))
+              ],
+            );
+          });
     }
   }
 
@@ -245,8 +249,8 @@ class _ChatPage extends State<ChatPage> {
     int index = buffer.indexOf(13);
     if (~index != 0) {
       setState(() {
-        messages.add(
-          _Message(
+        messagesReceived.add(
+          _MessageReceived(
             1,
             backspacesCounter > 0
                 ? _messageBuffer.substring(
@@ -262,54 +266,19 @@ class _ChatPage extends State<ChatPage> {
               0, _messageBuffer.length - backspacesCounter)
           : _messageBuffer + dataString);
     }
-    checkConnection();
   }
 
-  void _sendwifi(String text) async {
+  void _sendWifiCred(String name, String pass) async {
     wifiname.clear();
-
-    if (text.length > 0) {
-      try {
-        connection.output.add(utf8.encode(text + "\r\n"));
-        await connection.output.allSent;
-
-        setState(() {
-          messages.add(_Message(clientID, text));
-        });
-
-        Future.delayed(Duration(milliseconds: 333)).then((_) {
-          listScrollController.animateTo(
-              listScrollController.position.maxScrollExtent,
-              duration: Duration(milliseconds: 333),
-              curve: Curves.easeOut);
-        });
-      } catch (e) {
-        // Ignore error, but notify state
-        setState(() {});
-      }
-    }
-  }
-
-  void _sendpass(String text) async {
     wifipass.clear();
-
-    if (text.length > 0) {
+    if (name.length > 0 && pass.length > 0) {
       try {
-        connection.output.add(utf8.encode(text + "\r\n"));
-        await connection.output.allSent;
-
+        connection.output.add(utf8.encode(name + "\r\n" + pass));
+        await connection.input.allSent;
         setState(() {
-          messages.add(_Message(clientID, text));
-        });
-
-        Future.delayed(Duration(milliseconds: 333)).then((_) {
-          listScrollController.animateTo(
-              listScrollController.position.maxScrollExtent,
-              duration: Duration(milliseconds: 333),
-              curve: Curves.easeOut);
+          messagesSent.add(_MessageSent(clientID, name, pass));
         });
       } catch (e) {
-        // Ignore error, but notify state
         setState(() {});
       }
     }

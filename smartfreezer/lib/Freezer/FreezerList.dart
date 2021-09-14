@@ -97,7 +97,6 @@ class _YourListViewItemState extends State<YourListViewItem> {
         ),
       ],
     ));
-    
   }
 
   tz.TZDateTime _nextInstanceOfTenAM(int hour, int minute) {
@@ -200,12 +199,11 @@ class _FreezerListState extends State<FreezerList> {
                     TextButton(
                         onPressed: () {
                           _deleteRef.child("Freezer").remove();
-                          _deleteRef.child("User").remove();
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              (MaterialPageRoute(
-                                  builder: (builder) => MainPage())),
-                              (route) => false);
+                          _deleteRef
+                              .child("User")
+                              .child(uid)
+                              .child(snapshot.value['FreezerName'])
+                              .remove();
                         },
                         child: Text("Delete"))
                   ],
