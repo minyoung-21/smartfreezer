@@ -51,10 +51,11 @@ class _FreezerInfoState extends State<FreezerInfo> {
         body: Column(
           children: [
             Container(
-              child: Text(retrieved ?? "" + "C", style: TextStyle(
+              child: Text(retrieved ?? "", style: TextStyle(
                 fontSize: 100
               ),),
-            ),
+              
+            ),Text("Degree Celcius"),
             SizedBox(
               height: 100,
             ),

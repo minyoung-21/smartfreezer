@@ -68,7 +68,7 @@ class _SignUpState extends State<SignUp> {
           try {
             firebase_auth.UserCredential userCredential =
                 await firebaseAuth.createUserWithEmailAndPassword(
-                    email: _emailController.text,
+                    email: _emailController.text.trim(),
                     password: _pwdController.text);
             setState(() {
               circular = false;

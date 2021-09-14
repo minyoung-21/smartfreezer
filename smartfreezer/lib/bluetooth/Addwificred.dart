@@ -89,7 +89,6 @@ class _AddWifiCred extends State<AddWifiCred> {
   var _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    checkConnection();
     // final List<Row> list = messages.map((_message) {
     //   return Row(
     //     children: <Widget>[
@@ -113,6 +112,22 @@ class _AddWifiCred extends State<AddWifiCred> {
     //         : MainAxisAlignment.start,
     //   );
     // }).toList();
+
+    final Iterable<Future> alertDialog = messagesReceived.map((_message) {
+      return showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              content: Text(
+                (text) {
+                  return text == '/shrug' ? 'shrug' : text;
+                }(_message.text.trim()),
+                style: TextStyle(
+                    color: _message.whom != clientID ? Colors.black : null),
+              ),
+            );
+          });
+    });
 
     return Scaffold(
         drawer: ActionBut(),
