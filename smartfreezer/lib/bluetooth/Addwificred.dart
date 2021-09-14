@@ -95,13 +95,19 @@ class _AddWifiCred extends State<AddWifiCred> {
           Container(
             child: Text(
                 (text) {
-                  return text == 'Connected'
-                      ? Navigator.pushAndRemoveUntil(
-                          context,
-                          (MaterialPageRoute(
-                              builder: (builder) => AddFreezer())),
-                          (route) => false)
-                      : text;
+                  return text == 'connected'
+                      ? showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              content: Text("Connected Successfully"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {}, child: Text("Proceed"))
+                              ],
+                            );
+                          })
+                      : text+"Please try again";
                 }(_message.text.trim()),
                 style: TextStyle(color: Colors.white)),
             padding: EdgeInsets.all(12.0),
@@ -191,39 +197,39 @@ class _AddWifiCred extends State<AddWifiCred> {
         ])));
   }
 
-  checkConnection() {
-    if (messagesReceived.last.text == "connected") {
-      return showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(content: Text("Connected"), actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        (MaterialPageRoute(builder: (builder) => AddFreezer())),
-                        (route) => false);
-                  },
-                  child: Text("Proceed"))
-            ]);
-          });
-    } else {
-      return showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(
-              content: Text("Not Connected"),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text("Type Credentials Again"))
-              ],
-            );
-          });
-    }
-  }
+  // checkConnection() {
+  //   if (messagesReceived.last.text == "connected") {
+  //     return showDialog(
+  //         context: context,
+  //         builder: (_) {
+  //           return AlertDialog(content: Text("Connected"), actions: [
+  //             TextButton(
+  //                 onPressed: () {
+  //                   Navigator.pushAndRemoveUntil(
+  //                       context,
+  //                       (MaterialPageRoute(builder: (builder) => AddFreezer())),
+  //                       (route) => false);
+  //                 },
+  //                 child: Text("Proceed"))
+  //           ]);
+  //         });
+  //   } else {
+  //     return showDialog(
+  //         context: context,
+  //         builder: (_) {
+  //           return AlertDialog(
+  //             content: Text("Not Connected"),
+  //             actions: [
+  //               TextButton(
+  //                   onPressed: () {
+  //                     Navigator.of(context).pop();
+  //                   },
+  //                   child: Text("Type Credentials Again"))
+  //             ],
+  //           );
+  //         });
+  //   }
+  // }
 
   _onDataReceived(Uint8List data) {
     // Allocate buffer for parsed data
