@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:smartfreezer/Action.dart';
+import 'package:smartfreezer/Freezer/AddFreezer.dart';
 
 class AddWifiCred extends StatefulWidget {
   final BluetoothDevice server;
@@ -163,14 +164,24 @@ class _AddWifiCred extends State<AddWifiCred> {
                 if (isConnected()) {
                   if (_formkey.currentState!.validate()) {
                     _sendWifiCred(wifiname.text, wifipass.text);
-                    final snackBar1 = SnackBar(content: Text("Connecting...."));
-                    if (true) {
-                      Future.delayed(const Duration(seconds: 2), () {});
-                      final snackBar =
-                          SnackBar(content: Text("Connecting...."));
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar1);
+                    final connecting =
+                        SnackBar(content: Text("Connecting...."));
+                    ScaffoldMessenger.of(context).showSnackBar(connecting);
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      Future.delayed(const Duration(seconds: 3), () {
+                        final snackBar = SnackBar(
+                          content: Text("Connected!!!"),
+                        );
+                        Future.delayed(const Duration(seconds: 3), () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              (MaterialPageRoute(
+                                  builder: (builder) => AddFreezer())),
+                              (route) => false);
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      });
+                    });
                   }
                 }
               },
