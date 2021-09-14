@@ -89,45 +89,35 @@ class _AddWifiCred extends State<AddWifiCred> {
   var _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    // final List<Row> list = messages.map((_message) {
-    //   return Row(
-    //     children: <Widget>[
-    //       Container(
-    //         child: Text(
-    //             (text) {
-    //               return text == '/shrug' ? '¯\\_(ツ)_/¯' : text;
-    //             }(_message.text.trim()),
-    //             style: TextStyle(color: Colors.white)),
-    //         padding: EdgeInsets.all(12.0),
-    //         margin: EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
-    //         width: 222.0,
-    //         decoration: BoxDecoration(
-    //             color:
-    //                 _message.whom == clientID ? Colors.blueAccent : Colors.grey,
-    //             borderRadius: BorderRadius.circular(7.0)),
-    //       ),
-    //     ],
-    //     mainAxisAlignment: _message.whom == clientID
-    //         ? MainAxisAlignment.end
-    //         : MainAxisAlignment.start,
-    //   );
-    // }).toList();
-
-    final Iterable<Future> alertDialog = messagesReceived.map((_message) {
-      return showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(
-              content: Text(
+    final List<Row> list = messagesReceived.map((_message) {
+      return Row(
+        children: <Widget>[
+          Container(
+            child: Text(
                 (text) {
-                  return text == '/shrug' ? 'shrug' : text;
+                  return text == 'Connected'
+                      ? Navigator.pushAndRemoveUntil(
+                          context,
+                          (MaterialPageRoute(
+                              builder: (builder) => AddFreezer())),
+                          (route) => false)
+                      : text;
                 }(_message.text.trim()),
-                style: TextStyle(
-                    color: _message.whom != clientID ? Colors.black : null),
-              ),
-            );
-          });
-    });
+                style: TextStyle(color: Colors.white)),
+            padding: EdgeInsets.all(12.0),
+            margin: EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
+            width: 222.0,
+            decoration: BoxDecoration(
+                color:
+                    _message.whom == clientID ? Colors.blueAccent : Colors.grey,
+                borderRadius: BorderRadius.circular(7.0)),
+          ),
+        ],
+        mainAxisAlignment: _message.whom == clientID
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
+      );
+    }).toList();
 
     return Scaffold(
         drawer: ActionBut(),
@@ -139,12 +129,6 @@ class _AddWifiCred extends State<AddWifiCred> {
                     : Text('Credentials sent to ' + widget.server.name!))),
         body: SafeArea(
             child: Column(children: <Widget>[
-          // Flexible(
-          //   child: ListView(
-          //       padding: const EdgeInsets.all(12.0),
-          //       controller: listScrollController,
-          //       children: list),
-          // ),
           Form(
             key: _formkey,
             child: Column(children: [
@@ -197,7 +181,13 @@ class _AddWifiCred extends State<AddWifiCred> {
                   }
                 }
               },
-              child: Text("Send WIFI Credentials"))
+              child: Text("Send WIFI Credentials")),
+          Flexible(
+            child: ListView(
+                padding: const EdgeInsets.all(12.0),
+                controller: listScrollController,
+                children: list),
+          ),
         ])));
   }
 
@@ -235,7 +225,7 @@ class _AddWifiCred extends State<AddWifiCred> {
     }
   }
 
-  void _onDataReceived(Uint8List data) {
+  _onDataReceived(Uint8List data) {
     // Allocate buffer for parsed data
     int backspacesCounter = 0;
     data.forEach((byte) {
