@@ -91,19 +91,16 @@ class _AddWifiCred extends State<AddWifiCred> {
       return Row(
         children: <Widget>[
           Container(
-            child: 
-            Text(
-              _message.toString(),
-            //(text) {
-            //   return text == 'connected'
-            //           ? "Connected"
-            //           : text;
-            //     }(_message.text.trim()),
-
-                style: TextStyle(color: Colors.black)),
-            // padding: EdgeInsets.all(12.0),
-            // margin: EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
-            // width: 222.0,
+            child: Text(
+                (text) {
+                  return text == 'connected'
+                      ? "Connected"
+                      : text;
+                }(_message.text.trim()),
+                style: TextStyle(color: Colors.white)),
+            padding: EdgeInsets.all(12.0),
+            margin: EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
+            width: 222.0,
             decoration: BoxDecoration(
                 color:
                     _message.whom == clientID ? Colors.blueAccent : Colors.grey,
