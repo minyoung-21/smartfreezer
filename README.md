@@ -11,5 +11,5 @@
 <li>send WIFI credentials over bluetooth</li>
 <li>display data from Firebase</li>
 <li>push local notification</li>
-<li>user Authentication</li>
+<li>authenticate users</li>
 </ul>
